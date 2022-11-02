@@ -25,8 +25,10 @@ class SlackSender(Sender):
             "icon_emoji": ":clapper:",  # ":tada:"
         }
         if isinstance(payload, tuple) or isinstance(payload, list):
+            text, blocks = payload
             data.update({"blocks": self._get_text_block(text) + blocks})
         else:
+            text = payload
             data.update({"text": f"{text} {self.user_mentions}"})
         
         return self._send_json(self.webhook_url, data)
