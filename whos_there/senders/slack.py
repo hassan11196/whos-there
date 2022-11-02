@@ -17,14 +17,18 @@ class SlackSender(Sender):
         self.channel = channel
         self.user_mentions = " ".join(user_mentions)
 
-    def send(self, text: str, blocks: Optional[List[Any]] = None) -> None:
+    def send(self, payload: Any) -> None:    
         data = {
             "username": "Knock Knock",
             "channel": self.channel,
             "link_names": 1,
             "icon_emoji": ":clapper:",  # ":tada:"
-            "blocks": self._get_text_block(text) + blocks
         }
+        if isinstance(payload, tuple) or isinstance(payload, list):
+            data.update({"blocks": self._get_text_block(text) + blocks})
+        else:
+            data.update({"text": f"{text} {self.user_mentions}")
+        
         return self._send_json(self.webhook_url, data)
 
     def _get_text_block(self, text):
