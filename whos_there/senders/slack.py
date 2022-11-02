@@ -27,7 +27,7 @@ class SlackSender(Sender):
         if isinstance(payload, tuple) or isinstance(payload, list):
             data.update({"blocks": self._get_text_block(text) + blocks})
         else:
-            data.update({"text": f"{text} {self.user_mentions}")
+            data.update({"text": f"{text} {self.user_mentions}"})
         
         return self._send_json(self.webhook_url, data)
 
