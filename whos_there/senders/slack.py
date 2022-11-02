@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any, Optional
 
 from whos_there.senders.base import Sender
 
@@ -17,12 +17,19 @@ class SlackSender(Sender):
         self.channel = channel
         self.user_mentions = " ".join(user_mentions)
 
-    def send(self, text: str) -> None:
+    def send(self, text: str, blocks: Optional[List[Any]] = None) -> None:
         data = {
             "username": "Knock Knock",
             "channel": self.channel,
             "link_names": 1,
             "icon_emoji": ":clapper:",  # ":tada:"
-            "text": f"{text} {self.user_mentions}",
+            "blocks": self._get_text_block(text) + blocks
         }
         return self._send_json(self.webhook_url, data)
+
+    def _get_text_block(self, text):
+      return [{"type": "section",
+               "text": {
+                  "type": "mrkdwn",
+                  "text": f"{text} {self.user_mentions}",
+              }}]
