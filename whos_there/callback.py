@@ -23,9 +23,9 @@ class NotificationCallback(Callback):
         self.senders = senders
         self._current_stage: str = None
 
-    def _send(self, text: str) -> None:
+    def _send(self, payload: Any) -> None:
         for sender in self.senders:
-            sender.send(text)
+            sender.send(payload)
 
     def setup(self, trainer: Trainer, pl_module: LightningModule, stage: Optional[str] = None) -> None:
         """Called when fit, validate, test, predict, or tune begins.
